@@ -1,13 +1,15 @@
 
 import './App.css'
 
+import Home from './pages/Home'
+
 function App() {
   
 
   return (
     <>
       <div>
-        <h1>User Management</h1> 
+        <Home/>
       </div>
     </>
   )
