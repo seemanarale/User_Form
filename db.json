@@ -1,3 +1,18 @@
 {
-  "users": []
+  "users": [
+    {
+      "id": "fa45",
+      "firstName": "Seema",
+      "lastName": "Narale",
+      "email": "seemanarale67@gmail.com",
+      "phone": "9511986553"
+    },
+    {
+      "id": "1d05",
+      "firstName": "Tushar",
+      "lastName": "Kalel",
+      "email": "tusharkalel@gmail.com",
+      "phone": "9975370030"
+    }
+  ]
 }

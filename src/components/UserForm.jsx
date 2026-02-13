@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { createUser } from "../services/userService";
+import { useEffect, useState } from "react";
+import { createUser, updateUser } from "../services/userService";
 
-export default function UserForm({onUserCreated}) {
+export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
          const [formValues, setFormValues] = useState({
             firstName: "",
             lastName: "",
@@ -9,7 +9,13 @@ export default function UserForm({onUserCreated}) {
             phone:""});
          const [errors, setErrors] = useState({});
          const [loading, setLoading]=useState(false);
-        const handleChange = (e) => {
+
+         useEffect(() => {
+            if (editingUser) {
+               setFormValues(editingUser);
+            }
+             }, [editingUser]);
+         const handleChange =(e)=>{
             const { name, value } = e.target;
             setFormValues(prevValues => ({
                 ...prevValues,
@@ -26,7 +32,13 @@ export default function UserForm({onUserCreated}) {
             try {
                 setLoading(true);
                 console.log(formValues);
-                await createUser(formValues);
+                if(editingUser)
+                {
+                    await updateUser(editingUser.id, formValues)
+                    setEditingUser(null);
+                }
+                else
+                    await createUser(formValues);
                 onUserCreated();
                 setFormValues({
                     firstName: "",
@@ -115,7 +127,7 @@ export default function UserForm({onUserCreated}) {
             onChange={handleChange}/><br/>
             {errors.phone && <div style={{color: "red"}}>{errors.phone}</div>}
            <button type="submit" disabled={loading}>
-            {loading ? "Adding... ": "Add User"} </button>
+            {loading ? "Processing... ": editingUser ? "Update User" : "Add user"} </button>
            </form>
 
         </div>
