@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { getUsers } from "../services/userService";
+import { deleteUser, getUsers } from "../services/userService";
 import UserForm from "../components/userForm";
 
 
@@ -15,6 +15,17 @@ export default function Home() {
             alert("failed to load data");
         }  
     }
+    const removeUser= async(id)=>{
+        try {
+             await deleteUser(id);
+             setUserList(prev=>prev.filter(u =>u.id !=id))
+             fetchUsers();
+          
+            
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
   fetchUsers();
@@ -27,7 +38,8 @@ export default function Home() {
             <ul>
               {userList.length === 0 ?( <p>No users found</p>) : 
                ( userList.map(user=>
-               <li key={user.id}> {user.firstName} {user.lastName} {user.email} {user.phone}</li>
+               <li key={user.id}> {user.firstName} {user.lastName} {user.email} {user.phone}
+               <button onClick={()=>removeUser(user.id)}>Delete</button></li>
             ))}
             </ul> 
         </div>
