@@ -1,9 +1,12 @@
 {
-    "users":[
-        {
-            "id":1,
-            "name":"seema",
-            "email":"seema@example.com"
-        }
-    ]
+  "users": [
+
+    {
+      "id": "5b63",
+      "firstName": "Seema",
+      "lastName": "Narale",
+      "email": "seemanarale67@gmail.com",
+      "phone": "9511986553"
+    }
+  ]
 }

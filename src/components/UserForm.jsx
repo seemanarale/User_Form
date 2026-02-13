@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createUser } from "../services/userService";
 
-export default function UserForm() {
+export default function UserForm({onUserCreated}) {
          const [formValues, setFormValues] = useState({
             firstName: "",
             lastName: "",
@@ -27,6 +27,7 @@ export default function UserForm() {
                 setLoading(true);
                 console.log(formValues);
                 await createUser(formValues);
+                onUserCreated();
                 setFormValues({
                     firstName: "",
                     lastName: "",
@@ -116,9 +117,7 @@ export default function UserForm() {
            <button type="submit" disabled={loading}>
             {loading ? "Adding... ": "Add User"} </button>
            </form>
-           <>
-              <h2>User details</h2>
-           </>
+
         </div>
     )
 }
