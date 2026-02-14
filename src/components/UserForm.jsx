@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { createUser, updateUser } from "../services/userService";
+import { userFormSchema } from "../schemas/UserFormSchema";
 
 export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
-         const [formValues, setFormValues] = useState({
-            firstName: "",
-            lastName: "",
-            email: "",
-            phone:""});
+        const [formValues, setFormValues] = useState(()=>{
+            return Object.fromEntries(userFormSchema.map(field=>[field.name, ""]))
+        });
          const [errors, setErrors] = useState({});
          const [loading, setLoading]=useState(false);
 
@@ -60,27 +59,15 @@ export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
              
         };
         const validateForm = () => 
-            {
-            const { firstName, lastName, email, phone } = formValues;
-            const newErrors={};
-            if (!firstName.trim()) {
-                newErrors.firstName = "First name is required";
-            }
-            if (!lastName.trim()) {
-                newErrors.lastName = "Last name is required";
-            }
-             const emailRegex = /^[^@]+@[^@]+$/;
-            if (!email.trim()) {
-                newErrors.email = "Email is required";
-            } else if (!emailRegex.test(email)) {
-                newErrors.email = "Invalid email format";
-            }
-            const phoneRegex = /^\d{10}$/;
-            if (!phone.trim()) {
-                newErrors.phone = "Phone number is required";
-            } else if (!phoneRegex.test(phone)) {
-                newErrors.phone = "Invalid phone number format";
-            }
+             {
+             const newErrors={};
+             userFormSchema.forEach(field=>{
+                 const value=formValues[field.name]
+                if(field.required && !value.trim())
+                   newErrors[field.name]=`${field.name} is mandatory` 
+                else if(field.pattern && value && !field.pattern.test(value))
+                    newErrors[field.name]=field.errorMessage;
+             })
             setErrors(newErrors); 
             return Object.keys(newErrors).length === 0;
         }
@@ -89,46 +76,48 @@ export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
         <div> 
             <h2>Add User</h2>
              <form onSubmit={handleSubmit} >
-            <label htmlFor="firstName">First Name:</label><br/>
-            <input 
-            type="text"
-            name="firstName" 
-            placeholder="Enter user first name"
-            value={formValues.firstName}
-            onChange={handleChange} /> <br/>
-            {errors.firstName && <div style={{color: "red"}}>{errors.firstName}</div>}
-
-            {/* lastName */}
-             <label htmlFor="lastName">Last Name:</label><br/>
-             <input 
-            type="text" 
-            name="lastName" 
-            placeholder="Enter user last name"
-            value={formValues.lastName}
-            onChange={handleChange} /><br/>  
-            {errors.lastName && <div style={{color: "red"}}>{errors.lastName}</div>}
-
-                {/* email */}
-            <label htmlFor="email">Email:</label><br/>
-            <input 
-            type="text" 
-            name="email" 
-            placeholder="Enter user email" 
-            value={formValues.email}
-            onChange={handleChange} /> <br/>
-            {errors.email && <div style={{color: "red"}}>{errors.email}</div>}
-
-            <label htmlFor="phone">Phone Number:</label><br/>
-            <input
-            type="text"
-            name="phone"
-            placeholder="Enter user phone number" 
-            value={formValues.phone} 
-            onChange={handleChange}/><br/>
-            {errors.phone && <div style={{color: "red"}}>{errors.phone}</div>}
-           <button type="submit" disabled={loading}>
-            {loading ? "Processing... ": editingUser ? "Update User" : "Add user"} </button>
-           </form>
+                  {userFormSchema.map(field=>
+                    (<div key={field.name}>
+                            <label htmlFor={field.name}>{field.label}</label><br/>
+                               <input 
+                                  type={field.type}
+                                  name={field.name}
+                                  value={formValues[field.name]}
+                                  onChange={handleChange} 
+                                /> <br/>
+                                {errors[field.name] && <div style={{color: "red"}}>{errors[field.name]}</div>}
+                        </div>)   
+                    
+                  )}
+                 <button type="submit" disabled={loading}>
+                 {loading ? "Processing... ": editingUser ? "Update User" : "Add user"} </button>
+             </form>  
+           {/* const validateForm = () => 
+             {
+            // const { firstName, lastName, email, phone } = formValues;
+            // const newErrors={};
+            // if (!firstName.trim()) {
+            //     newErrors.firstName = "First name is required";
+            // }
+            // if (!lastName.trim()) {
+            //     newErrors.lastName = "Last name is required";
+            // }
+            //  const emailRegex = /^[^@]+@[^@]+$/;
+            // if (!email.trim()) {
+            //     newErrors.email = "Email is required";
+            // } else if (!emailRegex.test(email)) {
+            //     newErrors.email = "Invalid email format";
+            // }
+            // const phoneRegex = /^\d{10}$/;
+            // if (!phone.trim()) {
+            //     newErrors.phone = "Phone number is required";
+            // } else if (!phoneRegex.test(phone)) {
+            //     newErrors.phone = "Invalid phone numbefirstNamer format";
+            // }
+            setErrors(newErrors); 
+            return Object.keys(newErrors).length === 0;
+        }  */}
+           
 
         </div>
     )
