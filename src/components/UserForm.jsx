@@ -92,33 +92,6 @@ export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
                  <button type="submit" disabled={loading}>
                  {loading ? "Processing... ": editingUser ? "Update User" : "Add user"} </button>
              </form>  
-           {/* const validateForm = () => 
-             {
-            // const { firstName, lastName, email, phone } = formValues;
-            // const newErrors={};
-            // if (!firstName.trim()) {
-            //     newErrors.firstName = "First name is required";
-            // }
-            // if (!lastName.trim()) {
-            //     newErrors.lastName = "Last name is required";
-            // }
-            //  const emailRegex = /^[^@]+@[^@]+$/;
-            // if (!email.trim()) {
-            //     newErrors.email = "Email is required";
-            // } else if (!emailRegex.test(email)) {
-            //     newErrors.email = "Invalid email format";
-            // }
-            // const phoneRegex = /^\d{10}$/;
-            // if (!phone.trim()) {
-            //     newErrors.phone = "Phone number is required";
-            // } else if (!phoneRegex.test(phone)) {
-            //     newErrors.phone = "Invalid phone numbefirstNamer format";
-            // }
-            setErrors(newErrors); 
-            return Object.keys(newErrors).length === 0;
-        }  */}
-           
-
         </div>
     )
 }
