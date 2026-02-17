@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { deleteUser, getUsers, updateUser } from "../services/userService";
-import UserForm from "../components/UserForm";
+import { deleteUser, getUsers, updateUser } from "../services/userService.js";
+import UserForm from "../components/UserForm.js";
+import type { User } from "../types/User.js";
 
 export default function Home() {
-    const [userList, setUserList]=useState([])
-    const[editingUser, setEditingUser]=useState(null)
+    const [userList, setUserList]=useState<User[]>([])
+    const[editingUser, setEditingUser]=useState<User | null>(null)
     const fetchUsers=async()=>{
         try {
              const res=await getUsers();
@@ -14,7 +15,7 @@ export default function Home() {
             alert("failed to load data");
         }  
     }
-    const removeUser= async(id)=>{
+    const removeUser= async(id:number)=>{
         try {
              await deleteUser(id);
              fetchUsers();    
@@ -36,7 +37,7 @@ export default function Home() {
                userList.map(user=>
                <li key={user.id}> {user.firstName} {user.lastName} {user.email} {user.phone}
                <button onClick={()=>setEditingUser(user)}>Edit</button>
-               <button onClick={()=>removeUser(user.id)}>Delete</button>
+               <button onClick={()=>removeUser(user.id!)}>Delete</button>
                </li>
             )}
             </ul> 

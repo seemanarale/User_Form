@@ -1,14 +1,20 @@
 export interface User {
-  id?   : number;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  
+}
+
+export interface UserFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
 }
 
 export interface fieldSchema{
-    name: keyof User;
+    name: keyof UserFormData;
     label: string;
     type: string;
     required: boolean;

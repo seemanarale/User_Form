@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
-import { createUser, updateUser } from "../services/userService";
-import { userFormSchema } from "../schemas/UserFormSchema";
+import { createUser, updateUser } from "../services/userService.js";
+import { userFormSchema } from "../schemas/UserFormSchema.js";
+import type { User, UserFormData } from "../types/User.js";
 
-export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
-        const [formValues, setFormValues] = useState(()=>{
-            return Object.fromEntries(userFormSchema.map(field=>[field.name, ""]))
-        });
-         const [errors, setErrors] = useState({});
+interface UserFormProps {
+  onUserCreated: () => void;
+  editingUser: User | null;
+  setEditingUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+
+export default function UserForm(
+    {onUserCreated, editingUser, setEditingUser}: UserFormProps) {
+        const createInitialFormValues = (): UserFormData => {
+            const values={} as UserFormData;
+            userFormSchema.forEach(field=>
+                values[field.name]=""
+            );
+            return values;
+        }   
+        const [formValues, setFormValues] = useState<UserFormData>(createInitialFormValues)
+         const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
          const [loading, setLoading]=useState(false);
 
          useEffect(() => {
@@ -14,7 +27,7 @@ export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
                setFormValues(editingUser);
             }
              }, [editingUser]);
-         const handleChange =(e)=>{
+         const handleChange =(e: React.ChangeEvent<HTMLInputElement>)=>{
             const { name, value } = e.target;
             setFormValues(prevValues => ({
                 ...prevValues,
@@ -25,7 +38,7 @@ export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
                 [name]: ""
             }));
         };
-        const handleSubmit = async (e) => {
+        const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             if (!validateForm()) return;
             try {
@@ -60,13 +73,13 @@ export default function UserForm({onUserCreated, editingUser, setEditingUser}) {
         };
         const validateForm = () => 
              {
-             const newErrors={};
+             const newErrors:Partial<Record<keyof UserFormData, string>> = {};
              userFormSchema.forEach(field=>{
                  const value=formValues[field.name]
                 if(field.required && !value.trim())
                    newErrors[field.name]=`${field.name} is mandatory` 
                 else if(field.pattern && value && !field.pattern.test(value))
-                    newErrors[field.name]=field.errorMessage;
+                    newErrors[field.name]=field.errorMessage ?? "Invalid value";
              })
             setErrors(newErrors); 
             return Object.keys(newErrors).length === 0;
