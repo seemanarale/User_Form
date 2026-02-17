@@ -1,16 +1,35 @@
-# React + Vite
+# React User Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
+- Full CRUD functionality
+- Schema-driven dynamic form
+- TypeScript strict typing
+- Material UI styling
+- Validation with regex support
+- Confirmation dialogs
+- Snackbar notifications
 
-Currently, two official plugins are available:
+## Tech Stack
+- React
+- TypeScript
+- Material UI
+- Axios
+- JSON Server
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup
 
-## React Compiler
+1. Install dependencies
+   npm install
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. Start JSON server
+   npx json-server --watch db.json --port 3001
 
-## Expanding the ESLint configuration
+3. Start frontend
+   npm run dev
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Extending Form Fields
+
+To add a new field:
+1. Add property to `UserFormData` in `types/User.ts`
+2. Add entry in `userFormSchema`
+No changes required in UI logic.

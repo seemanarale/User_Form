@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createUser, updateUser } from "../services/userService.js";
 import { userFormSchema } from "../schemas/UserFormSchema.js";
 import type { User, UserFormData } from "../types/User.js";
-
+import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 interface UserFormProps {
   onUserCreated: () => void;
   editingUser: User | null;
@@ -19,9 +19,8 @@ export default function UserForm(
             return values;
         }   
         const [formValues, setFormValues] = useState<UserFormData>(createInitialFormValues)
-         const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
-         const [loading, setLoading]=useState(false);
-
+        const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
+        const [loading, setLoading]=useState(false);
          useEffect(() => {
             if (editingUser) {
                setFormValues(editingUser);
@@ -59,7 +58,7 @@ export default function UserForm(
                     phone:""
                 });
             setErrors({});  
-            alert("User added successfully");
+            
                 
             } catch (error) {
                 console.error("failed to add User");
@@ -86,25 +85,47 @@ export default function UserForm(
         }
             
     return (
-        <div> 
-            <h2>Add User</h2>
-             <form onSubmit={handleSubmit} >
-                  {userFormSchema.map(field=>
-                    (<div key={field.name}>
-                            <label htmlFor={field.name}>{field.label}</label><br/>
-                               <input 
-                                  type={field.type}
-                                  name={field.name}
-                                  value={formValues[field.name]}
-                                  onChange={handleChange} 
-                                /> <br/>
-                                {errors[field.name] && <div style={{color: "red"}}>{errors[field.name]}</div>}
-                        </div>)   
-                    
-                  )}
-                 <button type="submit" disabled={loading}>
-                 {loading ? "Processing... ": editingUser ? "Update User" : "Add user"} </button>
-             </form>  
-        </div>
-    )
+       <Paper elevation={3} sx={{p: 3, width: 500, maxWidth: "100%"}}>
+       <Typography variant="h6" gutterBottom>
+          {editingUser ? "Update User" : "Add User"}
+       </Typography>
+
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2
+        }}
+      >
+        {userFormSchema.map(field => (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type={field.type}
+            value={formValues[field.name]}
+            onChange={handleChange}
+            error={Boolean(errors[field.name])}
+            helperText={errors[field.name]}
+            fullWidth
+          />
+        ))}
+
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={loading}
+        >
+          {loading
+            ? "Processing..."
+            : editingUser
+            ? "Update User"
+            : "Add User"}
+        </Button>
+      </Box>
+    </Paper>
+  );
+
 }
