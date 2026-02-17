@@ -1,4 +1,6 @@
-export const userFormSchema=[
+import type{ fieldSchema } from "../types/User.js"
+
+export const userFormSchema: fieldSchema[] = [
     {name:"firstName", type:"text", label:"First Name", required:true},
     {name:"lastName", type:"text", label:"Last Name" ,required:true},
     {name: "email", label: "Email", type: "text", required: true,pattern: /^[^@]+@[^@]+$/,

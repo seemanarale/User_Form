@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import type { User, UserFormData } from "../types/User.js"
 const api=axios.create({
     baseURL:"http://localhost:3001/",
     headers:{
@@ -7,22 +7,22 @@ const api=axios.create({
     },
 })
 
-export const createUser = async (user) => {
+export const createUser = async (user: UserFormData) : Promise<User>=> {
         const res= await api.post("/users", user)
         return res.data;   
      
 }
 
-export const getUsers= async ()=>{
+export const getUsers= async (): Promise<User[]>=>{
     const res= await api.get("/users");
     return res.data;
 }
 
-export const deleteUser=async(id)=>{
+export const deleteUser=async(id: number): Promise<void>=>{
     await api.delete(`/users/${id}`)
 }
 
-export const updateUser=async(id, updatedUser)=>{
+export const updateUser=async(id: number, updatedUser: UserFormData): Promise<User>=>{
     const res=await api.put(`/users/${id}`, updatedUser);
     return res.data;
 }
